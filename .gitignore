@@ -40,3 +40,12 @@ yarn-debug.log*
 .yarn-integrity
 
 app/views/.DS_Store
+
+# Ignore images uploaded in development
+/public/uploads
+
+# Ignore others (manually added)
+/app/assets/.DS_Store
+/app/assets/images/.DS_Store
+/db/migrate/.DS_Store
+/public/.DS_Store

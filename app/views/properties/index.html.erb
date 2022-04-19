@@ -1,0 +1,38 @@
+<div class="property_wrapper">
+  <div class="property_container">
+    <h2>登録ルーム一覧</h2>
+  </div>
+
+  <% @properties.each do |p| %>
+
+    <div class="property_container clearfix">
+      <div class="property_box_index">
+        <%= link_to(property_path(p)) do %>
+          <% if p.main_image.present? %>
+            <%= image_tag p.main_image.url, class: "prop_img_small img_link" %>
+          <% else %>
+            <%= image_tag 'sample_property.png', class: "prop_img_small img_link" %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="property_box_index">
+        <%= link_to(property_path(p)) do %>
+          <h4 class="text_link">
+            <%= p.name %>
+          </h4>
+        <% end %>
+        <p>〒<%= p.postal_code %> <%= p.city[4..] %><%= p.address %></p>
+        <p>
+          <%= link_to '詳細', property_path(p), class: "text_link" %> | 
+          <%= link_to '編集', edit_property_path(p), class: "text_link" %>
+          
+          <% if p.reputations.present? %>
+             | 
+            <%= link_to '口コミあり', reputations_path, class: "text_link" %>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+</div>

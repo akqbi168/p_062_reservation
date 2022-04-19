@@ -1,0 +1,718 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+  $fa-font-path: '@fortawesome/fontawesome-free/webfonts';
+  @import '@fortawesome/fontawesome-free/scss/fontawesome';
+  @import '@fortawesome/fontawesome-free/scss/solid';
+  @import '@fortawesome/fontawesome-free/scss/regular';
+  @import '@fortawesome/fontawesome-free/scss/brands';
+  @import '@fortawesome/fontawesome-free/scss/v4-shims';
+
+
+
+// variables
+$alert: #c52f24;
+$notice: #23bdc4;
+$notice_dark: #0d8c91;
+$notice_light: #93e3e7;
+
+$header_height: 10vh;
+$footer_height: 60px;
+
+
+// general
+* {
+  box-sizing: border-box;
+  font-family: 'Helvetica', '游ゴシック', 'Hiragino Kaku Gothic ProN', 'Osaka', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.clearfix::after {
+  clear: both;
+  content: " ";
+  display: block;
+}
+
+.notice,
+.alert {
+  font-size: 0.9em;
+  font-weight: 600;
+  margin: 20px 0;
+}
+.alert, .color_red {
+  color: $alert;
+}
+.notice, .color_blue {
+  color: $notice;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+.float_left {
+  float: left;
+}
+
+body {
+  position: relative;
+}
+
+h2 {
+  margin-bottom: 40px;
+}
+
+.text_link {
+  color: #16595c;
+  transition: 0.1s;
+
+  &:hover {
+    color: $notice;
+  }
+  &:active {
+    color: $notice_dark;
+  }
+}
+.text_link.delete {
+
+  &:hover {
+    color: $alert;
+  }
+  &:active {
+    color: $alert;
+  }
+}
+
+.text_small {
+  color: #000;
+  font-size: 0.7em;
+}
+.text_tiny {
+  color: #000;
+  font-size: 0.4em;
+
+  &.right {
+    text-align: right;
+  }
+}
+
+
+// header, footer
+.header_wrapper,
+.footer_wrapper {
+  background-color: #000;
+  color: #fff;
+  width: 100%;
+}
+
+.header_wrapper {
+  height: $header_height;
+  min-height: 80px;
+  position: fixed;
+  top: 0;
+  z-index: 99;
+
+  p {
+    line-height: $header_height;
+  }
+
+  .logo_container,
+  .search_container,
+  .account_container {
+    color: #fff;
+    float: left;
+    padding: 0 30px;
+
+    p {
+      color: #fff;
+    }
+  }
+  .logo_container {
+    line-height: $header_height;
+
+    p {
+      font-weight: 600;
+      transition: 0.1s;
+
+      &:hover {
+        color: $notice;
+      }
+
+      &:active {
+        color: $notice_dark;
+      }
+    }
+  }
+  .search_container {
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+  .account_container {
+    background-color: #000;
+    float: right;
+    line-height: $header_height;
+    width: 160px;
+
+    position: relative;
+    cursor: pointer;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    .account_toggle {
+      background-color: #000;
+      border-radius: 0 0 0 10px;
+      color: #fff;
+      display: none;
+      position: absolute;
+      top: $header_height;
+      right: 0;
+      width: 160px;
+      padding: 0 20px 20px 20px;
+
+      p {
+        line-height: 32px;
+        transition: 0.1s;
+        font-weight: 600;
+        font-size: 14px;
+
+        &:hover {
+          color: $notice;
+        }
+
+        &:active {
+          color: $notice_dark;
+        }
+      }
+
+      .destroy_link_hover:hover {
+        color: $alert;
+      }
+    }
+
+    &:hover .account_toggle {
+      display: inline-block;
+    }
+  }
+}
+
+.footer_wrapper {
+  height: $footer_height;
+  padding-left: 20px;
+
+  p {
+    line-height: $footer_height;
+  }
+}
+
+
+// search
+.search_box {
+  float: left;
+  height: $header_height;
+  padding: 10px 10px 10px 0;
+  display: table-cell;
+  vertical-align: middle;
+
+  h6 {
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+
+  .search_box_form {
+    height: 2em;
+    width: 150px;
+  }
+  .search_box_form.wide {
+    width: 200px;
+  }
+  .search_box_form.narrow {
+    width: 100px;
+  }
+}
+
+.search_submit_btn {
+  margin: 20px;
+  font-size: 15px;
+  padding: 5px;
+}
+
+
+// body
+.header_margin {
+  margin-top: $header_height;
+}
+
+.footer_margin {
+  margin-bottom: $footer_height;
+}
+
+.top_wrapper {
+
+  .top_image_container {
+    background: url("top_image.jpg") center center / cover no-repeat;
+    display: block;
+    height: 100vh - $header_height;
+    position: relative;
+    width: 100%;
+  }
+
+  .top_phrase {
+    backdrop-filter: blur(8px);
+    background-color: rgba( 196, 196, 196, 0.6 );
+    border-radius: 8px;
+    color: #fff;
+    // line-height: 1.5em;
+    padding: 3px 10px;
+    position: absolute;
+
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%,-50%);
+  }
+
+  .top_message_container {
+    margin: 0 auto;
+    width: 1000px;
+  }
+
+  .top_area_container,
+  .top_property_container {
+    margin: 60px auto;
+    width: 1000px;
+
+    .top_area_box,
+    .top_property_box {
+      float: left;
+      margin: 0 25px 0 0;
+      position: relative;
+      width: 225px;
+      transition: 0.1s;
+
+      .top_hover_text {
+        background-color: rgba(0,0,0,0);
+        color: #fff;
+        font-size: 0.9em;
+        line-height: 225px;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        opacity: 0;
+        text-align: center;
+        transform: translate(-50%,-50%);
+        transition: 0.1s;
+        width: 225px;
+    
+        &.city {
+          font-size: 2em;
+        }
+    
+        &:hover {
+          background-color: rgba(0,0,0,0.8);
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.home_wrapper {
+  padding: 30px 0;
+  
+  .home_container {
+    margin: 30px auto;
+    padding: 0 30px;
+    width: 1000px;
+
+    h3 {
+      margin: 80px 0 30px 0;
+    }
+
+    h4 {
+      margin: 30px 0 5px 0;
+    }
+
+    .marker {
+      background-image: linear-gradient(transparent 60%, $notice_light 0%)
+    }
+
+    .home_welcome_indent {
+      margin-left: 2em;
+    }
+
+    .home_welcome_week {
+    }
+    .home_welcome_ratio {
+      padding-right: 20px;
+      text-align: right;
+    }
+  }
+}
+
+.user_wrapper {
+  padding: 30px 0;
+
+  .user_container {
+    margin: 30px auto;
+    padding: 0 30px;
+    width: 1000px;
+
+    h3 {
+      margin-bottom: 5px;
+    }
+
+    .user_form {
+      height: 2em;
+      padding-left: 5px;
+      width: 300px;
+    }
+    .user_form.user_form_area {
+      height: 8em;
+    }
+
+    .field {
+      margin-top: 10px;
+    }
+  }
+}
+
+.entity_wrapper {
+  padding: 30px 0;
+  
+  .entity_container {
+    margin: 30px auto;
+    padding: 0 30px;
+    width: 1000px;
+  
+    .entity_box {
+      float: left;
+      margin: 40px 25px 40px 0;
+      width: 225px;
+    }
+  }
+}
+
+.property_wrapper {
+  padding: 30px 0;
+
+  .property_container {
+    margin: 3em auto;
+    padding: 0 30px;
+    width: 1000px;
+
+    h4, p {
+      padding: 3px 0;
+    }
+
+    .margin_r {
+      margin-right: 1em;
+    }
+
+    .property_box {
+      margin: 10px 30px;
+    }
+    .property_box_index {
+      float: left;
+      margin: 0 30px 0 0;
+    }
+
+    .property_form {
+      height: 2em;
+      padding-left: 5px;
+      width: 200px;
+    }
+    .property_form.wide {
+      width: 400px;
+    }
+    .property_form.narrow {
+      width: 100px;
+    }
+    .property_form.area {
+      height: 12em;
+    }
+
+    .property_img_box {
+      float: left;
+      height: 400px;
+      margin-right: 20px;
+      width: 400px;
+
+      .prop_sub_images {
+        float: left;
+        height: 200px;
+        margin: 0 0px;
+        width: 200px;
+      }
+    }
+  }
+}
+
+.reservation_wrapper {
+  padding: 30px 0;
+
+  .reservation_container {
+    margin: 30px auto 50px;
+    padding: 0 30px;
+    width: 1000px;
+
+    .reservation_box {
+      float: left;
+      
+      p, h4 {
+        margin: 0 0 0 30px;
+        line-height: 1.5em;
+      }
+    }
+
+    table {
+      margin-bottom: 30px;
+    }
+  }
+
+  .now, .not_now {
+    border: 1px solid grey;
+    float: left;
+    font-size: 0.9em;
+    padding: 2px 30px;
+    // margin-bottom: 30px;
+  }
+  .now {
+    background-color: $notice;
+  }
+
+  .reservation_form {
+    height: 2em;
+    padding-left: 5px;
+    width: 200px;
+  }
+  .reservation_form.wide {
+    width: 400px;
+  }
+  .reservation_form.narrow {
+    width: 100px;
+  }
+}
+
+.reputation_wrapper {
+  padding: 30px 0;
+
+  .reputation_container {
+    margin: 30px auto;
+    padding: 0 30px;
+    width: 1000px;
+
+    h3 {
+      margin-top: 3em;
+    }
+
+    table {
+      margin-bottom: 30px;
+    }
+
+    .reputation_form {
+      height: 2em;
+      padding-left: 5px;
+      width: 200px;
+
+      &.wide {
+        width: 400px;
+      }
+      &.narrow {
+        width: auto;
+      }
+    }
+    .reputation_form.area {
+      height: 12em;
+    }
+  }
+}
+.reputation_box {
+  border: 1px solid $notice_dark;
+  border-radius: 8px;
+  margin: 10px 0;
+  padding: 0 0.5em;
+}
+.reputation_box.visible_link {
+
+  &:hover {
+    background-color: $notice_light;
+  }
+  &:active {
+    background-color: $notice;
+  }
+}
+.reputation_box.invisible_link {
+  background-color: #aaa;
+  opacity: 0.7;
+  border: 1px solid #888;
+
+  &:hover {
+    background-color: #999;
+  }
+  &:active {
+    background-color: #777;
+  }
+}
+
+.search_box {
+  float: left;
+  height: $header_height;
+  padding: 10px 10px 10px 0;
+  display: table-cell;
+  vertical-align: middle;      
+}
+
+.rating {
+  border: 2px solid $notice_dark;
+  border-radius: 50%;
+  color: $notice_dark;
+  display: inline-block;
+  font-size: 1.4em;
+  margin: 10px 0 10px 5px;
+  padding: 4px;
+}
+
+.table_td {
+  height: 2em;
+  margin: 0 0 0 0;
+  padding: 0 30px 0 0;
+}
+
+$button_height: 2em;
+
+.button {
+  background-color: #efefef;
+  border: 1px solid #767676;
+  border-radius: 3px;
+  color: #000;
+  cursor: pointer;
+  display:inline-block;
+  font-size: 0.9em;
+  height: $button_height;
+  line-height: $button_height;
+  margin: 0.5em 0 0 0;
+  padding: 0 0.4em;
+
+  &:hover {
+    background-color: #e5e5e5;
+  }
+  &:active {
+    background-color: #f5f5f5;
+  }
+
+  &.delete_account {
+    background-color: #fff;
+    border: 1px solid $alert;
+    color: $alert;
+    margin: 0;
+  
+    &:hover {
+      background-color: #fcb1ac;
+    }
+    &:active {
+      background-color: #d89994;
+    }
+  }
+
+  &.to_reservation {
+    background-color: #fff;
+    border: 3px solid $notice;
+    border-radius: 6px;
+    color: $notice;
+    font-weight: 800;
+    transition: 0.1s;
+  
+    &:hover {
+      border: 3px solid $notice_dark;
+      color: $notice_dark;
+    }
+    &:active {
+      background-color: $notice_dark;
+    }
+  }
+
+  &.delete {
+
+    &:hover {
+      color: $alert;
+    }
+    &:active {
+      color: $alert;
+    }
+  }
+}
+
+
+// image
+.user_img {
+  object-fit: cover;
+  height: 100px;
+  width: 100px;
+}
+
+.prop_img,
+.prop_img_small,
+.top_property_img,
+.prop_img_tiny {
+  object-fit: cover;
+  transition: 0.1s;
+}
+
+.img_link:hover {
+  opacity: 0.8;
+}
+.img_link:active {
+  transform: translateY(6px);
+}
+
+.prop_img {
+  height: 400px;
+  width: 400px;
+}
+
+.prop_img_small {
+  height: 200px;
+  width: 200px;
+}
+
+.prop_img_tiny {
+  height: 100px;
+  width: 100px;
+}
+
+.top_property_img {
+  height: 225px;
+  width: 225px;
+}
+
+#img_prev {
+  height: 100px;
+  margin-bottom: 20px;
+  object-fit: cover;
+  width: 100px;
+}
+
+
+// favorites
+.property_fav_area {
+  margin-left: 1em;
+}

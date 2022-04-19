@@ -46,3 +46,28 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+# ユーザー登録
+gem 'devise'
+
+# 検索
+gem 'ransack'
+
+# 日本語化
+gem 'rails-i18n'
+
+# enum日本語化ransack用
+gem 'enum_help'
+
+# 入力フォームのネスト化
+gem 'cocoon'
+
+# 日本の祝日取得
+gem 'holiday_jp'
+
+# 画像アップロード
+gem 'carrierwave'
+gem 'mini_magick'
+
+# デバッグ
+gem 'pry-rails'

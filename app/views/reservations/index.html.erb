@@ -1,0 +1,40 @@
+<div class="reservation_wrapper">
+  <div class="reservation_container">
+    <h2>予約一覧</h2>
+  </div>
+
+  <div class="reservation_container">
+    <% if @my_reservations.present? %>
+      <% @my_reservations.each do |r| %>
+        <div class="reservation_container clearfix">
+          <%= link_to(reservation_path(r)) do %>
+            <div class="reservation_box">
+              <% if r.property.main_image.present? %>
+                <%= image_tag r.property.main_image.to_s, class: "prop_img_tiny img_link" %>
+              <% else %>
+                <%= image_tag 'sample_property.png', class: "prop_img_tiny img_link" %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <div class="reservation_box">
+            <%= link_to(reservation_path(r)) do %>
+              <h4 class="text_link">
+                <%= r.property.name %>
+              </h4>
+            <% end %>
+            <p>IN - OUT：<%= l r.entities.first.date %> - <%= l r.entities.last.date.tomorrow %></p>
+            <p>合計金額：<%= number_to_currency(r.total_price) %></p>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p>予約が存在しません。</p>
+    <% end %>
+  </div>
+
+  <div class="reservation_container">
+    <%= link_to 'マイページへ', users_mypage_path, class: "button" %>
+  </div>
+
+</div>

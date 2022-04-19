@@ -1,0 +1,49 @@
+<div class="user_wrapper">
+  <div class="user_container">
+    <h2>マイページ編集</h2>
+
+    <%= render 'shared/errors', model: @user %>
+
+    <%= form_with(model: @user, local: true) do |f| %>
+
+      <table>
+        <tr>
+          <td>
+            <% if @user.user_icon.present? %>
+              <%= image_tag @user.user_icon.to_s, class: "user_img" %>
+            <% else %>
+              <%= image_tag 'sample_user.png', class: "user_img" %>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td class="table_td"><%= f.label :name %></td>
+          <td><%= f.text_field :name, class: "user_form" %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td"><%= f.label :user_icon %></td>
+          <td><%= f.file_field :user_icon %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td"><%= f.label :introduction %></td>
+          <td><%= f.text_area :introduction, class: "user_form user_form_area" %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td"><%= f.label :email %></td>
+          <td><%= f.email_field :email, autofocus: true, autocomplete: "email", class: "user_form" %></td>
+        </tr>
+      </table>
+
+      <%= f.submit '更新', class: "button" %>
+
+    <% end %>
+
+  </div>
+
+  <div class="user_container">
+    <%= link_to "戻る", users_mypage_path, class: "button" %>
+  </div>
+</div>

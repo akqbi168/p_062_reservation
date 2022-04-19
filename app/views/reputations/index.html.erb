@@ -1,0 +1,80 @@
+<div class="reputation_wrapper">
+  <div class="reputation_container">
+    <h2>口コミ一覧</h2>
+
+    <% if alert.present? %>
+      <p class="alert">
+        <%= alert %>
+      </p>
+    <% end %>
+    <% if notice.present? %>
+      <p class="notice">
+        <%= notice %>
+      </p>
+    <% end %>
+
+    <p>
+      ルームごとの口コミを表示しています。<br>
+      背景がグレーのものは一般には公開されません。<br>
+      口コミをクリックすると表示／非表示の切り替えができます。
+    </p>
+  </div>
+
+  <% @my_properties.each do |p| %>
+    <div class="reputation_container">
+      <%= link_to property_path(p) do %>
+        <h3 class="text_link"><%= p.name %></h3>
+      <% end %>
+
+      <% if p.reputations.present? %>
+        <span class="rating">
+          <%= (p.reputations.sum(:rating) / p.reputations.count).round(2) %>
+        </span>
+        <% unless p.reputations.count >= 5 %>
+          <span class="text_small">※件数が5件に達するまで実際のレートは表示されません。</span>
+        <% end %>
+
+        <% p.reputations.each do |r| %>
+          <%= link_to update_hidden_reputations_path(r), method: :patch do %>
+            <% if r.visible == true %>
+              <div class="reputation_box visible_link">
+                <p>
+                  <%= simple_format(r.testimonial) %>
+
+                  <span class="text_small">
+                    (<%= r.user.reservations.last.generation %>
+                    <%= r.user.reservations.last.sex %>)
+                  </span>
+                </p>
+              </div>
+            <% elsif r.visible == false %>
+              <div class="reputation_box invisible_link">
+                <p>
+                  ＜非表示設定中＞
+                  <span class="text_small">
+                    非表示にしても口コミの点数には加算されます。
+                  </span>
+                </p>
+                <p>
+                  <%= simple_format(r.testimonial) %>
+
+                  <span class="text_small">
+                    (<%= r.user.reservations.last.generation %>
+                    <%= r.user.reservations.last.sex %>)
+                  </span>
+                </p>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <p>口コミがありません</p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="reputation_container">
+    <%= link_to 'マイページへ', users_mypage_path, class: "button" %>
+  </div>
+
+</div>

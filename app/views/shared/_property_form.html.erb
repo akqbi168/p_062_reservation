@@ -1,0 +1,112 @@
+<%= form_with(model: @property, local: true) do |f| %>
+  <div class="property_container">
+
+    <table>
+      <tr>
+        <td class="table_td"><%= f.label :name, '名称' %></td>
+        <td><%= f.text_field :name, class: "property_form" %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :postal_code, '郵便番号' %></td>
+        <td><%= f.text_field :postal_code, class: "property_form" %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :country, '国' %></td>
+        <td><%= f.text_field :country, value: "日本", class: "property_form" %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :city, '都道府県' %></td>
+        <td><%= f.select :city, Property.cities.keys, {include_blank: true}, {class: "property_form"} %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :address, '市区町村以降' %></td>
+        <td><%= f.text_field :address, class: "property_form" %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :introduction, '紹介文/アピール' %></td>
+        <td><%= f.text_area :introduction, class: "property_form area" %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :main_image, 'トップ写真' %></td>
+        <td><%= f.file_field :main_image, multiple: false, class: "", id: "prop_img" %></td>
+        <%= image_tag @property.main_image.to_s, id: :img_prev %>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :sub_images, 'その他写真' %></td>
+        <td><%= f.file_field :sub_images, multiple: true, class: "", id: "prop_img" %></td>
+        <% @property.sub_images.each do |image| %>
+          <%= image_tag image.to_s, id: :img_prev %>
+        <% end %>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :if_dynamic_pricing, '価格変動制の導入' %></td>
+        <td><%= f.check_box :if_dynamic_pricing, class: "" %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :base_price, '基本料金' %></td>
+        <td><%= f.number_field :base_price, class: "property_form" %></td>
+      </tr>
+    
+      <tr>
+        <td class="table_td"><%= f.label :min_price, '最低料金（変動制導入時）' %></td>
+        <td><%= f.number_field :min_price, class: "property_form" %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :max_price, '最高料金（変動制導入時）' %></td>
+        <td><%= f.number_field :max_price, class: "property_form" %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :reservation_fee, '清掃費/予約料' %></td>
+        <td>
+          <% if action_name == 'new' || action_name == 'create' %>
+            <%= f.number_field :reservation_fee, value: 0, class: "property_form" %>
+          <% elsif action_name == 'edit' || action_name == 'update' %>
+            <%= f.number_field :reservation_fee, class: "property_form" %>
+          <% end %>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="table_td"><%= f.label :max_capacity, '上限人数' %></td>
+        <td><%= f.number_field :max_capacity, class: "property_form" %></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="property_container" id="date">
+    <h4>日付の追加</h4>
+
+    <%= f.fields_for :entities do |entity| %>
+      <%= render 'entity_fields', f: entity %>
+    <% end %>
+
+    <div class="links">
+      <%= link_to_add_association f, :entities, class: "" do %>
+        <p class="text_link table_td">(日付の追加)</p>
+      <% end %>
+    </div>
+  </div>
+
+  <% if action_name == 'new' || action_name == 'create' %>
+    <div class="property_container">
+      <%= f.submit 'ルーム追加', data: {confirm: "予約受付を開始します。よろしいですか？"}, class: "button" %>
+    </div>
+  <% elsif action_name == 'edit' || action_name == 'update' %>
+    <div class="property_container">
+      <%= link_to '戻る', property_path(@property), class: "button" %>
+      <%= f.submit 'ルーム更新', data: {confirm: "登録内容を更新します。よろしいですか？"}, class: "button" %>
+    </div>
+  <% end %>
+<% end %>
+

@@ -1,0 +1,37 @@
+<div class="entity_wrapper">
+  <div class="entity_container clearfix">
+    <h2>検索結果</h2>
+
+    <% if alert.present? %>
+      <p class="alert">
+        <%= alert %>
+      </p>
+    <% end %>
+
+    <% @properties.each do |p| %>
+      <% if @results.where(property_id: p).count == @q.date_lt - @q.date_gteq %>
+        <div class="entity_box">
+          <%= link_to(property_path(p, cid: @q.date_gteq, cod: @q.date_lt)) do %>
+            <% if p.main_image.present? %>
+              <%= image_tag p.main_image.to_s, class: "prop_img_small img_link" %>
+            <% else %>
+              <%= image_tag 'sample_property.png', class: "prop_img_small img_link" %>
+            <% end %>
+          <% end %>
+
+          <%= link_to(property_path(p, cid: @q.date_gteq, cod: @q.date_lt)) do %>
+            <p class="text_link"><%= p.name %></p>
+          <% end %>
+
+          <p><%= p.city[4..] %></p>
+
+          <% if p.if_dynamic_pricing == true %>
+            <p><%= number_to_currency(@results.where(property_id: p).pluck(:price_ratio).map{|ratio| [ [p.base_price * ratio, p.min_price].max, p.max_price].min }.sum.to_i + p.reservation_fee) %></p>
+          <% else %>
+            <p><%= number_to_currency(@results.where(property_id: p).sum(:base_price) + p.reservation_fee) %></p>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

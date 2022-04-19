@@ -1,0 +1,29 @@
+<div class="user_wrapper">
+  <div class="user_container">
+    <h2>マイページ</h2>
+
+    <%= render 'shared/errors', model: @user %>
+  </div>
+
+  <div class="user_container">
+    <h3>アカウント管理</h3>
+    <%= link_to '基本情報変更', edit_user_path(current_user), class: "text_link" %> / 
+    <%= link_to 'パスワード変更', edit_user_registration_path, class: "text_link" %>
+  </div>
+
+  <div class="user_container">
+    <h3>借りる</h3>
+    <%= link_to '予約済みルーム一覧', reservations_path, class: "text_link" %>
+  </div>
+
+  <div class="user_container">
+    <h3>貸し出す</h3>
+    <%= link_to '新規部屋登録', new_property_path, class: "text_link" %> / 
+    <%= link_to '登録済みルーム一覧', properties_path, class: "text_link" %> / 
+    <%= link_to '口コミ一覧', reputations_path, class: "text_link" %>
+  </div>
+
+  <div class="user_container">
+    <%= link_to 'トップへ', root_path, class: "button" %>
+  </div>
+</div>
