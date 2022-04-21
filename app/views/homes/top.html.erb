@@ -1,0 +1,55 @@
+<div class="top_wrapper clearfix">
+  <div class="top_image_container">
+  <h1 class="top_phrase">
+    <%= simple_format(@top_phrase) %>
+    <%= link_to welcome_path do %>
+      <span class="text_link text_tiny right">
+        <i class="fa-solid fa-circle-info"></i>
+        使い方はこちら
+      </span>
+    <% end %>
+  </h1>
+  
+  </div>
+
+  <% if notice.present? || alert.present? %>
+    <div class="top_message_container">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+    </div>
+  <% end %>
+
+  <div class="top_property_container clearfix">
+    <h2>おすすめのエリア</h2>
+
+    <% @random_cities.each do |rc| %>
+      <div class="top_area_box img_link">
+        <%= link_to entities_path(@q, :'q[property_city_eq' => "#{rc.city[0..1]}") do %>
+          <%= image_tag "top_#{rc.city[0..1]}.jpg", class: "top_property_img" %>
+          <span class="top_hover_text city"><%= rc.city[4..] %></span>
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div class="top_property_container clearfix">
+    <h2>おすすめの宿泊先</h2>
+
+    <% if @properties.present? %>
+      <% @properties.order("RANDOM()").limit(4).each do |p| %>
+        <%= link_to property_path(p) do %>
+          <div class="top_property_box img_link">
+            <% if p.main_image.present? %>
+              <%= image_tag p.main_image.to_s, class: "top_property_img" %>
+            <% else %>
+              <%= image_tag 'sample_property.png', class: "top_property_img" %>
+            <% end %>
+
+            <span class="top_hover_text"><%= p.name %></span>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

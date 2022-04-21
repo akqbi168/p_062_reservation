@@ -1,0 +1,71 @@
+<div class="header_wrapper">
+  <div class="logo_container">
+    <%= link_to(root_path) do %>
+      <p>
+        <i class="fa-solid fa-cloud"></i>
+        Skybnb
+      </p>
+    <% end %>
+  </div>
+
+  <div class="account_container">
+    <% if user_signed_in? %>
+      <%= link_to(users_mypage_path) do %>
+        <div class="account_link">
+          <p>
+            <%= /@/.match(current_user.email).pre_match[0...8] %>
+            <i class="fa-solid fa-user fa-lg"></i>
+          </p>
+        </div>
+      <% end %>
+
+      <div class="account_toggle">
+        <%= link_to(users_mypage_path) do %>
+          <p>マイページ</p>
+        <% end %>
+        <%= link_to(new_property_path) do %>
+          <p>新規ルーム登録</p>
+        <% end %>
+        <% if current_user.properties.present? %>
+          <%= link_to(properties_path) do %>
+            <p>登録ルーム一覧</p>
+          <% end %>
+        <% end %>
+
+        <% if @reputations_to_my_properties.present? %>
+          <%= link_to(reputations_path) do %>
+            <p>口コミ一覧</p>
+          <% end %>
+        <% end %>
+
+        <% if current_user.reservations.present? %>
+          <%= link_to(reservations_path) do %>
+            <p>予約ルーム一覧</p>
+          <% end %>
+        <% end %>
+
+        <%= link_to welcome_path do %>
+          <p>使い方はこちら</p>
+        <% end %>
+
+        <%= link_to(destroy_user_session_path, method: :delete, data: {confirm: "ログアウトしますか？"}) do %>
+          <p class="destroy_link_hover">ログアウト</p>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="account_link">
+        <%= link_to(new_user_session_path) do %>
+          <p>
+            ログイン
+            <i class="fa-solid fa-user fa-lg"></i>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div class="search_container clearfix">
+    <%= render 'shared/search', q: @q, url: entities_path %>
+  </div>
+</div>

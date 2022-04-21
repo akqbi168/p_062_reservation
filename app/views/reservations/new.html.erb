@@ -1,0 +1,106 @@
+<div class="reservation_wrapper">
+  <div class="reservation_container">
+
+    <h2>予約情報入力</h2>
+
+    <%= render 'shared/errors', model: @reservation %>
+  </div>
+
+  <div class="reservation_container clearfix">
+    <div class="now">１　入力</div>
+    <div class="not_now">２　確認</div>
+    <div class="not_now">３　完了</div>
+  </div>
+
+  <div class="reservation_container">
+    <%= form_with(model: @reservation, url: confirm_reservations_path, local: true) do |f| %>
+
+      <table>
+        <tr>
+          <td class="table_td"><%= f.label :user_name, 'お名前' %></td>
+          <td>
+            <% if @my_latest_reservation %>
+              <%= f.text_field :user_name, value: @my_latest_reservation.user_name, class: "reservation_form" %>
+            <% else %>
+              <%= f.text_field :user_name, class: "reservation_form", placeholder: "須貝 薫" %>
+            <% end %>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="table_td"><%= f.label :generation, '年代' %></td>
+          <td>
+            <% if @my_latest_reservation %>
+              <%= f.select :generation, Reservation.generations.keys, {selected: @my_latest_reservation.generation}, {class: "reservation_form"} %>
+            <% else %>
+              <%= f.select(:generation, Reservation.generations.keys, {include_blank: true}, {class: "reservation_form narrow"}) %>
+            <% end %>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="table_td"><%= f.label :sex, '性別' %></td>
+          <td>
+            <% if @my_latest_reservation %>
+              <%= f.select :sex, Reservation.sexes.keys, {selected: @my_latest_reservation.sex}, {class: "reservation_form"} %>
+            <% else %>
+              <%= f.select(:sex, Reservation.sexes.keys, {include_blank: true}, {class: "reservation_form narrow"}) %>
+            <% end %>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="table_td"><%= f.label :address, '住所' %></td>
+          <td>
+            <% if @my_latest_reservation %>
+              <%= f.text_field :address, value: @my_latest_reservation.address, class: "reservation_form wide" %>
+            <% else %>
+              <%= f.text_field :address, class: "reservation_form wide", placeholder: "東京都渋谷区神宮前1-11-111" %>
+            <% end %>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="table_td"><%= f.label :phone_number, '電話番号' %></td>
+          <td>
+            <% if @my_latest_reservation %>
+              <%= f.text_field :phone_number, value: @my_latest_reservation.phone_number, class: "reservation_form" %>
+            <% else %>
+              <%= f.text_field :phone_number, class: "reservation_form", placeholder: "09012345678 ※ハイフン不要" %>
+            <% end %>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="table_td">宿泊先名称</td>
+          <td><%= @property.name %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">チェックイン日</td>
+          <td><%= l @my_entities.first.date %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">チェックアウト日</td>
+          <td><%= l @my_entities.last.date.tomorrow %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">料金総額</td>
+          <td>
+            <% if @property.if_dynamic_pricing == true %>
+              <%= number_to_currency(@my_entities.pluck(:price_ratio).map{|ratio| [ [@property.base_price * ratio, @property.min_price].max, @property.max_price].min }.sum.to_i + @property.reservation_fee) %>
+            <% else %>
+              <%= number_to_currency(@property.base_price * @my_entities.count + @property.reservation_fee) %>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+
+      <%= f.submit '最終確認へ', class: "button" %>
+
+    <% end %>
+
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="user_wrapper">
+  <div class="user_container">
+    <h2>パスワード変更</h2>
+  </div>
+
+  <div class="user_container">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label :current_password %><br />
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "user_form" %>
+      </div>
+
+      <div class="field">
+        新しい<%= f.label :password %><br />
+        <%= f.password_field :password, autocomplete: "new-password", class: "user_form" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password_confirmation %>
+        <% if @minimum_password_length %>
+          <em><i>(<%= @minimum_password_length %>文字以上)</i></em><br />
+        <% end %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "user_form" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "変更", class: "button" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="user_container">
+    <h3>アカウント消去</h3>
+
+    <p class="alert">
+      削除すると元に戻せません。
+      <%= link_to "アカウント消去", registration_path(resource_name), data: { confirm: "削除すると元に戻せません。本当にアカウントを削除しますか？" }, method: :delete, class: "button delete_account" %>
+    </p>
+  </div>
+
+  <div class="user_container">
+    <%= link_to "戻る", users_mypage_path, class: "button" %>
+  </div>
+</div>

@@ -9,5 +9,26 @@ import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
 Rails.start()
+require("jquery")
 Turbolinks.start()
 ActiveStorage.start()
+require("@nathanvda/cocoon")
+
+import '@fortawesome/fontawesome-free/js/all';
+
+
+// 画像のプレビュー表示
+$(function() {
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+  $('#img_prev').attr('src', e.target.result);
+    }
+    reader.readAsDataURL(input.files[0]);
+    }
+  }
+  $("#prop_img").change(function(){
+    readURL(this);
+  });
+});

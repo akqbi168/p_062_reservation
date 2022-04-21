@@ -1,0 +1,235 @@
+<div class="property_wrapper">
+  <div class="property_container">
+    <%= render 'shared/errors', model: @property %>
+
+    <h2>
+      <%= @property.name %>
+
+      <% if user_signed_in? %>
+        <% if @property.user == current_user %>
+          <span class="property_fav_area">
+            <i class="fa-solid fa-heart"></i>
+            <%= @favorites.count %>
+          </span>
+        <% else %>
+          <% if @favorite.blank? %>
+            <%= link_to(favorites_path(pid: @property.id), method: :post) do %>
+              <span class="property_fav_area text_link">
+                <i class="fa-regular fa-heart"></i>
+                <%= @favorites.count %>
+              </span>
+            <% end %>
+          <% else %>
+            <%= link_to(favorite_path(@favorite, fid: @favorite.id), method: :delete) do %>
+              <span class="property_fav_area text_link">
+                <i class="fa-solid fa-heart"></i>
+                <%= @favorites.count %>
+              </span>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <span class="property_fav_area">
+          <i class="fa-solid fa-heart"></i>
+          <%= @favorites.count %>
+        </span>
+      <% end %>
+    </h2>
+  </div>
+
+  <div class="property_container clearfix">
+    <div class="property_img_box">
+      <% if @property.main_image.present? %>
+        <%= image_tag @property.main_image.url, class: "prop_img" %>
+      <% else %>
+        <%= image_tag 'sample_property.png', class: "prop_img" %>
+      <% end %>
+    </div>
+    <div class="property_img_box">
+      <% if @property.sub_images %>
+        <% @property.sub_images[0..3].each do |image| %>
+          <%= image_tag image.to_s, class: "prop_sub_images" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+
+  <div class="property_container">
+    <h4>登録情報</h4>
+    <p>〒<%= @property.postal_code %> <%= @property.city[4..] %><%= @property.address %></p>
+    <p><%= @property.introduction %></p>
+
+    <% if user_signed_in? %>
+      <% if @property.user == current_user %>
+        <p>基本料金：<%= number_to_currency(@property.base_price) %></p>
+        <p>最低料金：<%= number_to_currency(@property.min_price) %></p>
+        <p>最高料金：<%= number_to_currency(@property.max_price) %></p>
+        <p>清掃料金：<%= number_to_currency(@property.reservation_fee) %></p>
+        <p>上限人数：<%= @property.max_capacity %>人</p>
+        <p><%= link_to '登録情報の編集', edit_property_path(@property), class: "button" %></p>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="property_container">
+    <% if params[:cid].present? && params[:cod].present? %>
+      <h4>料金</h4>
+
+      <% @entities.where(date: params[:cid]...params[:cod]).each_with_index do |e, i| %>
+        <p>
+          <%= i+1 %>泊目
+          <%= l e.date %>
+          <% if @property.if_dynamic_pricing == true %>
+            <%= number_to_currency([[@property.base_price * e.price_ratio, @property.min_price].max, @property.max_price].min) %>
+          <% else %>
+            <%= number_to_currency(@property.base_price) %>
+          <% end %>
+        </p>
+      <% end %>
+
+      <% if @property.reservation_fee > 0 %>
+        <p>
+          清掃料金：<%= number_to_currency(@property.reservation_fee) %>
+        </p>
+      <% end %>
+      <p>
+        合計：
+          <% if @property.if_dynamic_pricing == true %>
+            <%= number_to_currency(@entities.where(date: params[:cid]...params[:cod]).pluck(:price_ratio).map{|ratio| [ [@property.base_price * ratio, @property.min_price].max, @property.max_price].min }.sum.to_i + @property.reservation_fee) %>
+          <% else %>
+            <%= number_to_currency(@property.base_price * @entities.where(date: params[:cid]...params[:cod]).count + @property.reservation_fee) %>
+          <% end %>
+        (<%= @entities.where(date: params[:cid]...params[:cod]).count %>泊<%= @entities.where(date: params[:cid]...params[:cod]).count+1 %>日)
+      </p>
+
+      <% if user_signed_in? %>
+        <% unless @property.user == current_user %>
+          <h2><%= link_to '予約にすすむ', carts_path(pid: @property, cid: params[:cid], cod: params[:cod]), method: :post, class: "button to_reservation" %></h2>
+        <% end %>
+      <% else %>
+        <h2><%= link_to 'ログインして空室をチェック', property_path(@property, cid: params[:cid], cod: params[:cod]), class: "button to_reservation" %></h2>
+      <% end %>
+
+    <% end %>
+
+    <div class="clearfix">
+      <%= render 'shared/search_short', q: @q, url: entities_path %>
+    </div>
+
+  </div>
+
+
+  <div class="property_container">
+    <h4>口コミ</h4>
+
+    <p>
+      <% if @property.reputations.count >= 5 %>
+        <span class="rating">
+          <%= (@property.reputations.sum(:rating) / @property.reputations.count).round(2) %>
+        </span>
+      <% else %>
+        <span class="rating">0.00</span>
+        <span class="text_small">※件数が一定数を超えると平均点が表示されます。</span>
+      <% end %>
+    </p>
+
+    <% if @reputations.present? %>
+      <% @reputations.each do |r| %>
+        <div class="reputation_box">
+          <p>
+            <%= simple_format(r.testimonial) %>
+
+            <span class="text_small">
+              (<%= r.user.reservations.last.generation %>
+              <%= r.user.reservations.last.sex %>)
+            </span>
+          </p>
+        </div>
+      <% end %>
+
+    <% else %>
+      <p>口コミがありません</p>
+
+    <% end %>
+
+    <% if user_signed_in? %>
+      <% if @property.user == current_user %>
+        <%= link_to '口コミ表示設定', reputations_path, class: "button" %>
+      <% end %>
+    <% end %>
+  </div>
+
+
+  <% if user_signed_in? %>
+    <% if @property.user == current_user %>
+      <div class="property_container">
+
+        <h4>予約状況</h4>
+    
+        <% @entities.order("date").each do |e| %>
+          <p>
+            <% if e.date.wday == 0 || HolidayJp.holiday?(e.date) %>
+              <span class="color_red margin_r">
+                <%= l e.date, format: :long %>
+              </span>
+            <% elsif e.date.wday == 6 %>
+              <span class="color_blue margin_r">
+                <%= l e.date, format: :long %>
+              </span>
+            <% else %>
+              <span class="margin_r">
+                <%= l e.date, format: :long %>
+              </span>
+            <% end %>
+
+            <% if e.occupied_status == "occupied" %>
+              <i class="fa-solid fa-circle-xmark"></i>
+            <% elsif e.occupied_status == "pending" %>
+              <i class="fa-regular fa-comment-dots"></i>
+            <% elsif e.occupied_status == "vacant" %>
+              <i class="fa-regular fa-circle-check"></i>
+            <% end %>
+              
+            <%= e.occupied_status_i18n %>
+
+            <% if @property.if_dynamic_pricing == true %>
+              <%= number_to_currency([[@property.base_price * e.price_ratio, @property.min_price].max, @property.max_price].min) %>
+            <% else %>
+              <%= number_to_currency(@property.base_price) %>
+            <% end %>
+          </p>
+        <% end %>
+
+        <p>
+          <%= link_to '個別日程の追加/削除', edit_property_path(@property, anchor: 'date'), class: "button" %>
+        </p>
+
+        <% if @entities.present? %>
+          <%= form_with(url: multiple_updates_property_path, local: true) do |f| %>
+            <p>
+              <%= f.number_field :num, max: 30, min: 1, required: true, class: "property_form narrow" %>
+              日分を最後に追加する
+              <%= f.submit '追加', data: {confirm: "予約受付を開始します。よろしいですか？"}, class: "button" %>
+            </p>
+          <% end %>
+
+          <p>
+            <%= link_to '最終日の月末まで追加する', multiple_updates_property_path(num: "end_of_month"), method: :post, data: {confirm: "予約受付を開始します。よろしいですか？"}, class: "button" %>
+          </p>
+        <% end %>
+      </div>
+
+
+      <div class="property_container">
+        <p><%= link_to '一覧に戻る', properties_path, class: "button" %></p>
+      </div>
+
+
+      <div class="property_container">
+        <p><%= link_to '削除', property_path(@property), method: :delete, data: {confirm: "#{@property.name}を削除します。\n削除しても予約済みのルーム/日程の変更はできません。\nよろしいですか？"}, class: "button delete_account" %></p>
+      </div>
+    <% end %>
+  <% end %>
+
+</div>

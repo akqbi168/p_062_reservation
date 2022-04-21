@@ -1,0 +1,39 @@
+<div class="reputation_wrapper">
+  <div class="reputation_container">
+    <h2>投稿完了</h2>
+
+    <%= render 'shared/errors', model: @reputation %>
+  </div>
+
+  <div class="reputation_container">
+    <table>
+      <tr>
+        <td class="table_td">ルーム名</td>
+        <td><%= @property.name %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td">お名前</td>
+        <td>
+          <%= /@/.match(@user.email).pre_match[0...2] %>****** 様
+          <span class="text_small">※IDの一部のみ表示されます。</span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="table_td">評価</td>
+        <td><%= @reputation.rating %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td">口コミ</td>
+        <td><%= @reputation.testimonial %></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="reputation_container">
+    <%= link_to 'マイページへ', users_mypage_path, class: "button" %>
+  </div>
+
+</div>

@@ -1,0 +1,73 @@
+<div class="reservation_wrapper">
+  <div class="reservation_container">
+
+    <h2>予約完了</h2>
+
+    <%= render 'shared/errors', model: @reservation %>
+  </div>
+
+  <% if @path[:id].present? %>
+    <% if @path[:id] == "confirm" %>
+      <div class="reservation_container clearfix">
+        <div class="not_now">１　入力</div>
+        <div class="not_now">２　確認</div>
+        <div class="now">３　完了</div>
+      </div>
+    <% end %>
+  <% end %>
+  
+
+  <div class="reservation_container">
+    <table>
+      <tr>
+        <td class="table_td">お名前</td>
+        <td><%= @reservation.user_name %> 様</td>
+      </tr>
+
+      <tr>
+        <td class="table_td">宿泊先名称</td>
+        <td>
+          <%= link_to property_path(@reservation.property) do %>
+            <p  class="text_link">
+              <%= @reservation.property.name %>
+            </p>
+          <% end %>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="table_td">チェックイン日</td>
+        <td><%= l @reservation.entities.first.date %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td">チェックアウト日</td>
+        <td><%= l @reservation.entities.last.date.tomorrow %></td>
+      </tr>
+
+      <tr>
+        <td class="table_td">料金総額</td>
+        <td><%= number_to_currency(@reservation.total_price) %></td>
+      </tr>
+    </table>
+
+
+    <% if @reservation.entities.first.date >= Date.current %>
+      <p>お気をつけてお越しください。</p>
+    <% else %>
+      <p>ご利用ありがとうございました。</p>
+      <% if Date.current - 30 <= @reservation.entities.last.date %>
+        <% if @past_reputation.present? %>
+          <%= link_to '口コミを編集する', edit_reputation_path(@past_reputation), class: "button" %>
+        <% else %>
+          <%= link_to '口コミを書く', new_reputation_path(pid: @reservation.property), class: "button" %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="reservation_container">
+    <%= link_to '予約を参照する', reservations_path, class: "button" %>
+    <%= link_to 'トップへ', root_path, class: "button" %>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="reservation_wrapper">
+  <div class="reservation_container">
+
+    <h2>最終確認画面</h2>
+
+    <%= render 'shared/errors', model: @reservation %>
+  </div>
+
+  <div class="reservation_container clearfix">
+    <div class="not_now">１　入力</div>
+    <div class="now">２　確認</div>
+    <div class="not_now">３　完了</div>
+  </div>
+
+  <div class="reservation_container">
+    <p class="alert">下部の「予約確定」ボタンを押すまで予約は完了しません。</p>
+
+    <%= form_with(model: @reservation, local: true) do |f| %>
+
+      <table>
+        <tr>
+          <td class="table_td">お名前</td>
+          <td><%= @reservation.user_name %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">年代</td>
+          <td><%= @reservation.generation %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">性別</td>
+          <td><%= @reservation.sex %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">住所</td>
+          <td><%= @reservation.address %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">電話番号</td>
+          <td><%= @reservation.phone_number %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">宿泊先名称</td>
+          <td><%= @property.name %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">チェックイン日</td>
+          <td><%= l @my_entities.first.date %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">チェックアウト日</td>
+          <td><%= l @my_entities.last.date.tomorrow %></td>
+        </tr>
+
+        <tr>
+          <td class="table_td">料金総額</td>
+          <td>
+            <% if @property.if_dynamic_pricing == true %>
+              <%= number_to_currency(@my_entities.pluck(:price_ratio).map{|ratio| [ [@property.base_price * ratio, @property.min_price].max, @property.max_price].min }.sum.to_i + @property.reservation_fee) %>
+            <% else %>
+              <%= number_to_currency(@property.base_price * @my_entities.count + @property.reservation_fee) %>
+            <% end %>
+          </td>
+        </tr>
+      </table>
+
+      <%= f.submit '戻る', name: :back, class: "button" %>
+      <%= f.submit '予約確定', class: "button" %>
+
+    <% end %>
+
+  </div>
+</div>

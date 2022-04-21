@@ -34,5 +34,11 @@ module P062Reservation
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Setting time zone to Japan
+    config.time_zone = 'Tokyo'
+
+    # Setting default language to Japanese
+    config.i18n.default_locale = :ja
   end
 end

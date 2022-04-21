@@ -1,0 +1,29 @@
+<%= search_form_for @q, url: entities_path do |f| %>
+
+  <div class="search_box">
+    <h6>エリア：</h6>
+    <%= f.select(:property_city_eq, Property.cities.map{|k, v| [Property.cities_i18n[k], v]}, {include_blank: true}, {class: "search_box_form narrow"}) %>
+  </div>
+
+  <div class="search_box">
+    <h6>キーワード：</h6>
+    <%= f.text_field :property_name_or_property_introduction_cont_all, include_blank: true, class: "search_box_form wide" %>
+  </div>
+  
+  <div class="search_box">
+    <h6>チェックイン：</h6>
+    <%= f.date_field :date_gteq, class: "search_box_form" %>
+  </div>
+  
+  <div class="search_box">
+    <h6>チェックアウト：</h6>
+    <%= f.date_field :date_lt, class: "search_box_form" %>
+  </div>
+
+  <div class="search_box">
+    <h6>人数：</h6>
+    <%= f.select(:property_max_capacity_gteq, [1, 2, 3, 4, 5, 6, 7, 8, 9], {include_blank: true}, {class: "search_box_form narrow"}) %>
+  </div>
+
+  <%= f.submit '検索', class: "search_submit_btn" %>
+<% end %>
