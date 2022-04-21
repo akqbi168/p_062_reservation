@@ -22,7 +22,7 @@ class FavoritesController < ApplicationController
     if @favorite.destroy
       flash[:notice] = "いいねをやめました。"
     else
-      flash[:notice] = "処理に失敗しました。"
+      flash[:alert] = "処理に失敗しました。"
     end
 
     redirect_to request.referer
